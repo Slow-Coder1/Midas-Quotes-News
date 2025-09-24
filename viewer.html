@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<body>
+  <input id="sym" value="AAPL"/><button onclick="go()">Fetch</button>
+  <pre id="out"></pre>
+  <script>
+    async function go(){
+      const s = document.getElementById('sym').value.trim();
+      const [q,n] = await Promise.all([
+        fetch(`http://127.0.0.1:8787/quote?symbol=${s}`).then(r=>r.json()),
+        fetch(`http://127.0.0.1:8787/news?symbol=${s}&limit=3`).then(r=>r.json()),
+      ]);
+      document.getElementById('out').textContent = JSON.stringify({quote:q, news:n}, null, 2);
+    }
+  </script>
+</body>
+</html>
