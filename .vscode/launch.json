@@ -6,9 +6,9 @@
       "type": "python",
       "request": "launch",
       "module": "uvicorn",
-      "args": ["app.main:app", "--reload", "--port", "8787"],
-      "jinja": true,
-      "envFile": "${workspaceFolder}/.env"
+      "args": ["app.main:app", "--reload", "--port", "8787", "--host", "127.0.0.1"],
+      "envFile": "${workspaceFolder}/.env",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

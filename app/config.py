@@ -1,14 +1,22 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
+from typing import List
 
 class Settings(BaseSettings):
+    # env names accepted: CORS_ORIGINS (preferred) or cors_origin (alias)
+    CORS_ORIGINS: str = Field(
+        default="",
+        validation_alias="cors_origin",  
+    )
     FINNHUB_API_KEY: str | None = None
-    CORS_ORIGINS: str = ""  # comma-separated origins
 
     @property
-    def origins(self):
+    def origins(self) -> List[str]:
         return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore", 
+    )
 
 settings = Settings()

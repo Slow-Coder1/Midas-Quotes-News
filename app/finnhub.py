@@ -1,6 +1,10 @@
+#Handles all HTTP Communication wth Finnhub API
+
+
 import httpx
 from datetime import datetime, timedelta, timezone
 
+#Case URL for all Finnhub API endpoints
 FINNHUB_BASE = "https://finnhub.io/api/v1"
 
 class FinnhubClient:
@@ -11,14 +15,19 @@ class FinnhubClient:
     async def close(self):
         await self._client.aclose()
 
+    #fetch a stock quotes
     async def get_quote(self, symbol: str):
         url = f"{FINNHUB_BASE}/quote"
         params = {"symbol": symbol, "token": self.api_key}
+        #send GET request
         r = await self._client.get(url, params=params)
+        #Error if status is not 200
         r.raise_for_status()
         return r.json()
 
+    #Fetch company news form Finnhub
     async def get_company_news(self, symbol: str, days: int = 5):
+        #Date range from x days to today
         to_dt = datetime.now(timezone.utc).date()
         from_dt = to_dt - timedelta(days=days)
         url = f"{FINNHUB_BASE}/company-news"
